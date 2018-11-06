@@ -14,7 +14,12 @@
           :rules="{
             required: true, message: 'SN不能为空', trigger: 'blur'
           }">     
-          <el-input placeholder="请输入SN" v-model="device.sn" class="input-with-select" >   </el-input>      
+          <el-input placeholder="请输入SN" v-model="device.sn" class="input-with-select" > 
+            <el-select  placeholder="请选择设备" v-model="device.value" slot="prepend">
+              <el-option v-for="item in labelData" :label="item.name" :value="item.id"></el-option>
+            </el-select>
+          </el-input>
+          <el-input placeholder="备注" v-model="device.comment"></el-input>      
           <el-button @click.prevent="removeDevice(device)">删除</el-button>     
         </el-form-item>     
         <el-form-item>      
@@ -32,8 +37,13 @@
   data() {
       return {
         dynamicValidateForm: {
-          device: [{sn:''}],
+          device: [{sn:'',comment:''}],
         },
+        // labelData: [
+        //   { name: '显示器', id:1},
+        //   { name: '主机', id:2},
+        //   { name: '其他', id:3},
+        // ]
       };
     },
     methods: {
@@ -66,12 +76,17 @@
         });
       },
     },
+    computed: {
+      labelData() {
+        return this.$store.getters.device
+      }
+    },
     components: {
       headerBar,
+    },
+    mounted() {
+      this.$store.dispatch('GetDevice').then(resp => {console.log(resp)}).catch(err => {console.log(err)})
     }
-    // beforeUpdate() {
-    //   console.log(this.dynamicValidateForm)
-    // }
   }
 </script>
 <style>

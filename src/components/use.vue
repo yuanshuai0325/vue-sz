@@ -22,9 +22,10 @@
           }">
           <el-input placeholder="请输入SN" v-model="device.sn" class="input-with-select" >
             <el-select  placeholder="请选择设备" v-model="device.value" slot="prepend">
-              <el-option v-for="item in labelData" :label="item.label" :value="item.value"></el-option>
+              <el-option v-for="item in labelData" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-input>
+          <el-input placeholder="备注" v-model="device.comment"></el-input>
           <el-button @click.prevent="removeDevice(device)">删除</el-button>
         </el-form-item>
         <el-form-item>
@@ -43,22 +44,31 @@
       return {
         dynamicValidateForm: {
           device: [{
-            value:'', sn:''
+            value:'', sn:'',comment:''
           }],
           name: '',
         },
-        labelData: [
-          { label: '显示器', value:1},
-          { label: '主机', value:2},
-          { label: '其他', value:3},
-        ]
       };
     },
     methods: {
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log(this.dynamicValidateForm.device);
+            for (let item in this[formName].device) {
+              if (this[formName].device[item].value == '') {
+                this.$message.error("请在设备"+item+"处选择设备名称")
+                return
+              } 
+            }
+            this.$store.dispatch('AddUse',this[formName]).then(resp => {console.log(resp)
+              let pd = resp.exec
+              if (pd === 'true') {
+                this.$message.success(resp.ret)
+              } else {
+                this.$message.error(resp.ret)
+        }}).catch(err => {this.$message.error(err.ret)});
+
+            // console.log(this.dynamicValidateForm.device);
           } else {
             console.log('error submit!!');
             return false;
@@ -83,9 +93,28 @@
           sn: '',
         });
       },
+      // remoteMethod() {
+      //   this.$store.dispatch('GetDevice').then(resp => {console.log(resp)}).catch(err => {console.log(err)})
+      // }
+    },
+    computed: {
+      labelData() {
+        return this.$store.getters.device
+      },
     },
     components: {
       headerBar,
+    },
+    created() {
+      this.$store.dispatch('GetDevice').then(resp => {console.log(resp);
+        let pd = resp.exec
+        console.log(pd)
+        if (pd === 'true') {
+          this.$message.success('device更新成功')
+        } else {
+          this.$message.error(resp.ret)
+        }
+      }).catch(err => {console.log(err);this.$message.error(err)});
     }
     // beforeUpdate() {
     //   console.log(this.dynamicValidateForm)
