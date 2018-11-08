@@ -37,7 +37,7 @@
   data() {
       return {
         dynamicValidateForm: {
-          device: [{sn:'',comment:''}],
+          device: [{value:'',sn:'',comment:''}],
         },
         // labelData: [
         //   { name: '显示器', id:1},
@@ -50,7 +50,18 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log(this.dynamicValidateForm.device);
+            // for (let item in this[formName].device) {
+            //   if (this[formName].device[item].value == '') {
+            //     this.$message.error("请在设备"+item+"处选择设备名称")
+            //     return
+            //   } 
+            // }
+            this.$store.dispatch('AddStorage',this[formName]).then(resp => {console.log(resp)
+               {
+                this.$message.success(resp)
+              }
+        }).catch(err => {this.$message.error(err)});
+            // console.log(this.dynamicValidateForm.device);
           } else {
             console.log('error submit!!');
             return false;
@@ -84,8 +95,10 @@
     components: {
       headerBar,
     },
-    mounted() {
-      this.$store.dispatch('GetDevice').then(resp => {console.log(resp)}).catch(err => {console.log(err)})
+    created() {
+      this.$store.dispatch('GetDevice').then(resp => {console.log(resp);
+          this.$message.success('device更新成功')
+      }).catch(err => {console.log(err);this.$message.error(err)});
     }
   }
 </script>

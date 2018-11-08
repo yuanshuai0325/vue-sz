@@ -8,14 +8,12 @@
       <div style="margin-top: 15px;">
         <el-input placeholder="请输入SN" v-model="sn" class="input-with-select" @keyup.13.native="open">
           <el-select v-model="select" slot="prepend" placeholder="请选择">
-              <el-option label="餐厅名" value="1"></el-option>
-              <el-option label="订单号" value="2"></el-option>
-              <el-option label="用户电话" value="3"></el-option>
+              <el-option v-for="item in labelData" :label="item.name" :value="item.id"></el-option>
           </el-select>
           <el-button slot="append" icon="el-icon-search" @click="open()"></el-button>
         </el-input>
       </div>
-      <el-row :gutter="20">
+      <el-row :gutter="20" v-show="search_hide">
         <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>
         <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>
         <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
@@ -23,9 +21,7 @@
       </el-row>
     </el-main>
     <el-footer>
-      <div class="block">
-        <el-pagination background layout="prev, pager, next" :total="100"></el-pagination>
-      </div>
+      
     </el-footer>
   </el-container>
 </template>
@@ -51,8 +47,21 @@
         });
       }
     },
+    computed: {
+      labelData() {
+        return this.$store.getters.device
+      },
+      search_hide() {
+        return this.$store.getters.search_hide
+      }
+    },
     components: {
       headerBar,
+    },
+    created() {
+      this.$store.dispatch('GetDevice').then(resp => {console.log(resp);
+          this.$message.success('device更新成功')
+      }).catch(err => {console.log(err);this.$message.error(err)});
     }
   }
 </script>

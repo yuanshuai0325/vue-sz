@@ -1,14 +1,18 @@
-import { getDevice, addUse } from '@/api/device'
+import { getDevice, addUse,addStorage } from '@/api/device'
 
 import * as types from '../mutation-types.js'
 
 const dev = {
 	state: {
 		device: [],
+		search_hide: false,
 	},
 	getters: {
 		device(state) {
 			return state.device
+		},
+		search_hide(state) {
+			return state.search_hide
 		}
 	},
 	mutations: {
@@ -23,12 +27,12 @@ const dev = {
 					let pd = resp.data.exec
 					if (pd === 'true') {
 						commit(types.SET_DEVICE, resp.data.ret)
-						resolve(resp.data)
+						resolve(resp.data.ret)
 					} else {
-						reject(resp.data)
+						reject(resp.data.ret)
 					}
 				}).catch(err => {
-					reject('device数据更新失败111', err)
+					reject('device数据更新失败111')
 				})
 			})
 		},
@@ -37,12 +41,26 @@ const dev = {
 				addUse(formdata).then(resp => {
 					let pd = resp.data.exec
 					if (pd === 'true') {
-						resolve(resp.data)
+						resolve(resp.data.ret)
 					} else {
-						reject(resp.data)
+						reject(resp.data.ret)
 					}
 				}).catch(err => {
-					reject('使用列表更新失败', err)
+					reject('使用列表更新失败')
+				})
+			})
+		},
+		AddStorage({commit},formdata) {
+			return new Promise((resolve, reject) => {
+				addStorage(formdata).then(resp => {
+					let pd = resp.data.exec
+					if (pd === 'true') {
+						resolve(resp.data.ret)
+					} else {
+						reject(resp.data.ret)
+					}
+				}).catch(err => {
+					reject('库存列表更新失败')
 				})
 			})
 		}

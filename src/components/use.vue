@@ -61,12 +61,8 @@
               } 
             }
             this.$store.dispatch('AddUse',this[formName]).then(resp => {console.log(resp)
-              let pd = resp.exec
-              if (pd === 'true') {
-                this.$message.success(resp.ret)
-              } else {
-                this.$message.error(resp.ret)
-        }}).catch(err => {this.$message.error(err.ret)});
+                this.$message.success(resp)}
+              ).catch(err => {this.$message.error(err)});
 
             // console.log(this.dynamicValidateForm.device);
           } else {
@@ -107,13 +103,7 @@
     },
     created() {
       this.$store.dispatch('GetDevice').then(resp => {console.log(resp);
-        let pd = resp.exec
-        console.log(pd)
-        if (pd === 'true') {
           this.$message.success('device更新成功')
-        } else {
-          this.$message.error(resp.ret)
-        }
       }).catch(err => {console.log(err);this.$message.error(err)});
     }
     // beforeUpdate() {

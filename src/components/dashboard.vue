@@ -8,7 +8,9 @@
       
     </el-main>
     <el-footer>
-
+      <div class="block">
+        <el-pagination background layout="prev, pager, next" :total="100"></el-pagination>
+      </div>
     </el-footer>
   </el-container>
 </template>
