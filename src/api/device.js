@@ -38,3 +38,16 @@ export function addStorage(formdata) {
 		]
 	})
 }
+
+export function searchDevice(data) {
+	return request({
+		method: 'post',
+		url: '/searchdevice',
+		data: data,
+		transformRequest:[
+			function(data) {
+				return 'sn='+data[0]+'&select='+data[1]
+			}
+		]
+	})
+}

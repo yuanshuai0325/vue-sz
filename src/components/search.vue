@@ -7,17 +7,18 @@
     <el-main>
       <div style="margin-top: 15px;">
         <el-input placeholder="请输入SN" v-model="sn" class="input-with-select" @keyup.13.native="open">
-          <el-select v-model="select" slot="prepend" placeholder="请选择">
+          <el-select  placeholder="请选择设备" v-model="select" slot="prepend" >
               <el-option v-for="item in labelData" :label="item.name" :value="item.id"></el-option>
-          </el-select>
+            </el-select>
           <el-button slot="append" icon="el-icon-search" @click="open()"></el-button>
         </el-input>
       </div>
-      <el-row :gutter="20" v-show="search_hide">
-        <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="10"><div class="grid-content bg-purple"></div></el-col>
+      <el-row :gutter="20" v-show="search_show">
+        <el-col :span="4"><div class="grid-content bg-purple">{{ search_device.user__name }}</div></el-col>
+        <el-col :span="4"><div class="grid-content bg-purple">{{ search_device.device__name}}</div></el-col>
+        <el-col :span="6"><div class="grid-content bg-purple">{{ search_device.sn}}</div></el-col>
+        <el-col :span="4"><div class="grid-content bg-purple">{{ search_device.day}}</div></el-col>
+        <el-col :span="6"><div class="grid-content bg-purple">{{ search_device.comment}}</div></el-col>
       </el-row>
     </el-main>
     <el-footer>
@@ -35,34 +36,46 @@
       }
     },
     methods: {
+      // open() {
+      //   this.$alert('这是一段内容', '标题名称', {
+      //     confirmButtonText: '确定',
+      //     callback: action => {
+      //       this.$message({
+      //         type: 'info',
+      //         message: `action: ${ action }`
+      //       });
+      //     }
+      //   });
+      // },
+      // test() {
+      //   console.log(this.select)
+      // },
       open() {
-        this.$alert('这是一段内容', '标题名称', {
-          confirmButtonText: '确定',
-          callback: action => {
-            this.$message({
-              type: 'info',
-              message: `action: ${ action }`
-            });
-          }
-        });
+        this.$store.dispatch('SearchDevice',[this.sn,this.select]).then(resp => {console.log(resp);
+          this.$message.success(resp);
+        }).catch(err => {this.$message.error(err)})
       }
     },
     computed: {
       labelData() {
         return this.$store.getters.device
       },
-      search_hide() {
-        return this.$store.getters.search_hide
-      }
+      search_show() {
+        return this.$store.getters.search_show
+      },
+      search_device() {
+        return this.$store.getters.search_device
+      },
     },
     components: {
       headerBar,
     },
     created() {
+      this.$store.dispatch('ChSearchDevice',false)
       this.$store.dispatch('GetDevice').then(resp => {console.log(resp);
           this.$message.success('device更新成功')
       }).catch(err => {console.log(err);this.$message.error(err)});
-    }
+    },
   }
 </script>
 <style>

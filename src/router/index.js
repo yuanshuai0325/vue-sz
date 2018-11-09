@@ -35,6 +35,19 @@ export const constantRouterMap = [
   },
 ]
 
+
+// const router = new Router({
+//   routes: constantRouterMap
+// })
+
+// router.beforeEach((to, from, next) => {
+//   console.log(11111111);
+//   this.$store.dispatch('ChSearchDevice',false);
+//   next();
+// })
+
 export default new Router({
   routes: constantRouterMap
 })
+
+// export default router

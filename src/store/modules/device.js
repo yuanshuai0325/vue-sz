@@ -1,24 +1,34 @@
-import { getDevice, addUse,addStorage } from '@/api/device'
+import { getDevice, addUse, addStorage, searchDevice } from '@/api/device'
 
 import * as types from '../mutation-types.js'
 
 const dev = {
 	state: {
 		device: [],
-		search_hide: false,
+		search_show: false,
+		search_device: '',
 	},
 	getters: {
 		device(state) {
 			return state.device
 		},
-		search_hide(state) {
-			return state.search_hide
+		search_show(state) {
+			return state.search_show
+		},
+		search_device(state) {
+			return state.search_device
 		}
 	},
 	mutations: {
 		[types.SET_DEVICE](state, device) {
 			state.device = device
-		}
+		},
+		[types.SET_SEARCH_SHOW](state, show) {
+			state.search_show = show
+		},
+		[types.SET_SEARCH_DEVICE](state, search_device) {
+			state.search_device = search_device
+		},
 	},
 	actions: {
 		GetDevice({commit}) {
@@ -50,6 +60,9 @@ const dev = {
 				})
 			})
 		},
+		ChSearchDevice({commit},status) {
+			commit(types.SET_SEARCH_SHOW,status)
+		},
 		AddStorage({commit},formdata) {
 			return new Promise((resolve, reject) => {
 				addStorage(formdata).then(resp => {
@@ -63,7 +76,25 @@ const dev = {
 					reject('库存列表更新失败')
 				})
 			})
-		}
+		},
+		SearchDevice({commit},data) {
+			return new Promise((resolve, reject) => {
+				searchDevice(data).then(resp => {
+					let pd = resp.data.exec
+					if (pd === 'true') {
+						console.log(1111,resp.data.ret)
+						commit(types.SET_SEARCH_DEVICE, resp.data.ret)
+						commit(types.SET_SEARCH_SHOW,true)
+						resolve('查找硬件成功')
+					} else {
+						commit(types.SET_SEARCH_SHOW,false)
+						reject(resp.data.ret)
+					}
+				}).catch(err => {
+					reject('查找硬件失败')
+				})
+			})
+		},
 	}
 }
 
