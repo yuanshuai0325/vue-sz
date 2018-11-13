@@ -9,6 +9,7 @@ import actions from './actions.js'
 import mutations from './mutations.js'
 
 import device from './modules/device.js'
+import dashboard from './modules/dashboard.js'
 
 export default new Vuex.Store({
   state,
@@ -17,5 +18,6 @@ export default new Vuex.Store({
   mutations,
   modules: {
   	device,
+  	dashboard,
   }
 })

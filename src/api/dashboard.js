@@ -1,9 +1,16 @@
 import request from '@/utils/request'
 
-export function getDevice() {
+export function getallUse() {
 	return request({
 		method: 'get',
-		url: '/sdevice'
+		url: '/searchalluse'
+	})
+}
+
+export function getallStorage() {
+	return request({
+		method: 'get',
+		url: '/searchallstorage'
 	})
 }
 
