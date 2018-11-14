@@ -22,14 +22,16 @@
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :page-sizes="pagesizes"
-      :page-size="pagesize"
+      :page-sizes="[100, 200, 300, 400]"
+      :page-size="100"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="total">
+      :total="400">
     </el-pagination>
   </div>
     </el-footer>
   </el-container>
+ <!--  @size-change="handleSizeChange"
+          @current-change="handleCurrentChange" -->
 </template>
 <script>
   import headerBar from 'bar/headerBar.vue'
@@ -42,6 +44,14 @@
         // pagesizes: [],
         // total: '',
         // data: '',
+      }
+    },
+     methods: {
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
       }
     },
     components: {
@@ -63,21 +73,9 @@
       },
     },
     methods: {
-      getall() {
-        this.$store.dispatch("GetAll",this.value).then(resp => { this.$message.success(resp) }).catch(err => {this.$message.error(err)})
-      },
-      handleSizeChange(val) {
-        this.$store.dispatch("ChangeCurSize",val);
-        this.getall()
-      },
-      handleCurrentChange(val) {
-        this.$store.dispatch("ChangeCurPage",val);
-        this.getall()
-      },
       chswitch() {
-        // this.$store.dispatch("GetAll",this.value).then(resp => { this.$message.success(resp) }).catch(err => {this.$message.error(err)})
-        this.getall()
-      },
+        this.$store.dispatch("GetAll",this.value).then(resp => { this.$message.success(resp) }).catch(err => {this.$message.error(err)})
+      }
     },
     created() {
       // this.pagesizes = this.$store.getters.pagesizes
