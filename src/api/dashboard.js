@@ -41,3 +41,51 @@ export function updateDevice(data) {
 		]
 	})
 }
+
+export function updateUse(data) {
+	return request({
+		method: 'post',
+		url: '/updateuse',
+		data: data,
+		transformRequest:[
+			function(data) {
+				let params = ''
+				for(let key in data)
+					params += key + "=" + data[key] + '&'
+				return params
+			}
+		]
+	})
+}
+
+export function updateStorage(data) {
+	return request({
+		method: 'post',
+		url: '/updatestorage',
+		data: data,
+		transformRequest:[
+			function(data) {
+				let params = ''
+				for(let key in data)
+					params += key + "=" + data[key] + '&'
+				return params
+			}
+		]
+	})
+}
+
+export function updateDelete(data) {
+	return request({
+		method: 'post',
+		url: '/updatedelete',
+		data: data,
+		transformRequest:[
+			function(data) {
+				let params = ''
+				for(let key in data)
+					params += key + "=" + data[key] + '&'
+				return params
+			}
+		]
+	})
+}

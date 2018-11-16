@@ -64,7 +64,7 @@
     },
     methods: {
       getall() {
-        this.$store.dispatch("GetAll",this.value).then(resp => { this.$message.success(resp) }).catch(err => {this.$message.error(err)})
+        this.$store.dispatch("GetAll").then(resp => { this.$message.success(resp) }).catch(err => {this.$message.error(err)})
       },
       handleSizeChange(val) {
         this.$store.dispatch("ChangeCurSize",val);
@@ -75,7 +75,9 @@
         this.getall()
       },
       chswitch() {
-        // this.$store.dispatch("GetAll",this.value).then(resp => { this.$message.success(resp) }).catch(err => {this.$message.error(err)})
+        console.log(1)
+        this.$store.dispatch("ChangeUseShow")
+        console.log(2)
         this.getall()
       },
     },

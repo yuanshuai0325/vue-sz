@@ -6,15 +6,12 @@
     <el-aside></el-aside>
     <el-main>
       <div style="margin-top: 15px;">
-      <el-row>  
-        <el-col :span="3"><el-checkbox v-model="select">用户名查询</el-checkbox></el-col>
-        <el-col :span="21"><el-input placeholder="请输入,默认使用sn查询" v-model="sn" class="input-with-select" @keyup.13.native="open">
-          <!-- <el-select  placeholder="请选择设备" v-model="select" slot="prepend" >
+        <el-input placeholder="请输入SN" v-model="sn" class="input-with-select" @keyup.13.native="open">
+          <el-select  placeholder="请选择设备" v-model="select" slot="prepend" >
               <el-option v-for="item in labelData" :label="item.name" :value="item.id"></el-option>
-            </el-select> -->
+            </el-select>
           <el-button slot="append" icon="el-icon-search" @click="open()"></el-button>
-        </el-input></el-col>
-      </el-row>
+        </el-input>
       </div>
       <show :data="search_device" :sn='sn' :select='select' v-if="search_show"></show>
     </el-main>
@@ -30,7 +27,7 @@
     data() {
       return {
         sn:'',
-        select: false,
+        select: '',
       }
     },
     methods: {
@@ -55,9 +52,9 @@
       }
     },
     computed: {
-      // labelData() {
-      //   return this.$store.getters.device
-      // },
+      labelData() {
+        return this.$store.getters.device
+      },
       search_show() {
         return this.$store.getters.search_show
       },
@@ -71,9 +68,9 @@
     },
     created() {
       this.$store.dispatch('ChSearchDevice',false)
-      // this.$store.dispatch('GetDevice').then(resp => {console.log(resp);
-      //     this.$message.success('device更新成功')
-      // }).catch(err => {console.log(err);this.$message.error(err)});
+      this.$store.dispatch('GetDevice').then(resp => {console.log(resp);
+          this.$message.success('device更新成功')
+      }).catch(err => {console.log(err);this.$message.error(err)});
     },
   }
 </script>

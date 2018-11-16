@@ -1,4 +1,4 @@
-import { getallUse, getallStorage, updateDevice } from '@/api/dashboard'
+import { getallUse, getallStorage, updateDevice, updateUse, updateStorage, updateDelete} from '@/api/dashboard'
 
 import * as types from '../mutation-types.js'
 
@@ -9,6 +9,7 @@ const dashboard = {
 		total: 1,
 		all: '',
 		curpage: 1,
+		useshow: true,
 	},
 	getters: {
 		pagesizes(state) {
@@ -29,8 +30,14 @@ const dashboard = {
 		cursize(state) {
 			return state.pagesize
 		},
+		useshow(state) {
+			return state.useshow
+		}
 	},
 	mutations: {
+		[types.SET_USESHOW](state) {
+			state.useshow = !state.useshow
+		},
 		[types.SET_CURPAGE](state, curpage) {
 			state.curpage = curpage
 		},
@@ -50,6 +57,9 @@ const dashboard = {
 		},
 		ChangeCurSize({commit},cursize) {
 			commit(types.SET_CURSIZE,cursize)
+		},
+		ChangeUseShow({commit}) {
+			commit(types.SET_USESHOW)
 		},
 		GetAllUse({commit,state}) {
 			return new Promise((resolve, reject) => {
@@ -83,9 +93,9 @@ const dashboard = {
 				})
 			})
 		},
-		GetAll({commit},value) {
+		GetAll({commit,state}) {
 			return new Promise((resolve,reject) => {
-				if (value) {
+				if (state.useshow) {
 					this.dispatch("GetAllUse").then(resp => {resolve(resp)}).catch(err => {reject(err)})
 				} else {
 					this.dispatch("GetAllStorage").then(resp => {resolve(resp)}).catch(err => {reject(err)})
@@ -97,6 +107,52 @@ const dashboard = {
 				updateDevice(data).then(resp => {
 					let pd = resp.data.exec
 					if (pd === 'true') {
+						this.dispatch("GetAll")
+						resolve("update device 成功")
+					} else {
+						reject("all库存获取失败")
+					}
+				}).catch(err => {
+					reject(err.data.ret)
+				})
+			})
+		},
+		UpdateUse({commit},data) {
+			return new Promise((resolve,reject) => {
+				updateUse(data).then(resp => {
+					let pd = resp.data.exec
+					if (pd === 'true') {
+						this.dispatch("GetAll")
+						resolve("update use 成功")
+					} else {
+						reject("all库存获取失败")
+					}
+				}).catch(err => {
+					reject(err.data.ret)
+				})
+			})
+		},
+		UpdateStorage({commit},data) {
+			return new Promise((resolve,reject) => {
+				updateStorage(data).then(resp => {
+					let pd = resp.data.exec
+					if (pd === 'true') {
+						this.dispatch("GetAll")
+						resolve("update device 成功")
+					} else {
+						reject("all库存获取失败")
+					}
+				}).catch(err => {
+					reject(err.data.ret)
+				})
+			})
+		},
+		UpdateDelete({commit},data) {
+			return new Promise((resolve,reject) => {
+				updateDelete(data).then(resp => {
+					let pd = resp.data.exec
+					if (pd === 'true') {
+						this.dispatch("GetAll")
 						resolve("update device 成功")
 					} else {
 						reject("all库存获取失败")

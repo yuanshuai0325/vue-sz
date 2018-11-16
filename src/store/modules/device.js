@@ -87,10 +87,12 @@ const dev = {
 						commit(types.SET_SEARCH_SHOW,true)
 						resolve('查找硬件成功')
 					} else {
+						console.log(222,resp.data.ret)
 						commit(types.SET_SEARCH_SHOW,false)
 						reject(resp.data.ret)
 					}
 				}).catch(err => {
+						console.log(333,err.data.ret)
 					reject('查找硬件失败')
 				})
 			})
