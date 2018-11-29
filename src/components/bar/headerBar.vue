@@ -21,9 +21,13 @@
       			<el-menu-item index="2-4-3">选项3</el-menu-item>
     	</el-submenu> -->
   	</el-submenu>
-  	<el-menu-item index="4" disabled>消息中心</el-menu-item>
+  	<el-submenu index="4">
+      <template slot="title">用户中心</template>
+      <el-menu-item index="userlist">用户列表</el-menu-item>
+      <el-menu-item index="4-2"><a href="http://192.168.154.100:8000/admin" target="_blank">后台用户</a></el-menu-item>
+    </el-submenu>
   	<!-- <el-menu-item index="4"><a href="http://127.0.0.1" target="_blank">x退出</a></el-menu-item> -->
-  	<el-menu-item index="/" >退出</el-menu-item>
+  	<el-menu-item index="5" @click="out">退出</el-menu-item>
 </el-menu>
 </template>
 
@@ -38,7 +42,11 @@
     	  handleSelect(key, keyPath) {
     	    console.log(key, keyPath);
           console.log(this.activeIndex)
-    	  }
+    	  },
+        out() {
+          // sessionStorage.removeItem("token")
+          this.$router.push('login')
+        }
     	},
       mounted(){
         this.activeIndex = this.$router.history.current.name

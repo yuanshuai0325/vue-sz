@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+ import { Message } from 'element-ui'
 
 Vue.use(Router)
 
@@ -30,15 +31,65 @@ export const constantRouterMap = [
     name: 'storage',
   },
   {
+    path: '/userlist',
+    component: resolve => { require(['components/userlist'], resolve)},
+    name: 'userlist',
+  },
+  {
     path: '/',
     redirect: 'login',
   },
 ]
 
 
-// const router = new Router({
-//   routes: constantRouterMap
-// })
+
+const router = new Router({
+  routes: constantRouterMap
+})
+
+router.beforeEach((to,from,next) => {
+  // if (to.meta.requireAuth) {
+  // }
+  var token = sessionStorage.getItem("token");
+
+  if (token || to.name === 'login') {
+    console.log('已获取token')
+    if ( to.name === 'login' ) {
+      sessionStorage.removeItem("token")
+      token = ''
+    }
+    next()
+  } else {
+    console.log('未获取token')
+    Message({
+      message: '请登录',
+      type: 'error',
+      duration: 5*1000
+    })
+    next('/')
+  }
+  console.log(to,from)
+  if ( to.fullPath === "/4-2" ) {
+    next(from.fullPath)
+  }
+  // if ( token ) {
+  //   next();
+  // } else {
+  //   next({
+  //     path: '/login',
+  //   })
+  // }
+  // if (token) {
+
+  // console.log(token)
+  // next({
+  //     path: '/login'
+  //   })
+  // } else {
+
+  // }
+
+})
 
 // router.beforeEach((to, from, next) => {
 //   console.log(11111111);
@@ -46,8 +97,8 @@ export const constantRouterMap = [
 //   next();
 // })
 
-export default new Router({
-  routes: constantRouterMap
-})
+// export default new Router({
+//   routes: constantRouterMap
+// })
 
-// export default router
+export default router

@@ -33,11 +33,11 @@
         rules: {
           name: [
             { required: true, message: '请输入用户名', trigger: 'blur' },
-            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
           ],
           passwd: [
             { required: true, message: '请输入密码', trigger: 'blur' },
-            { min:3, message: '密码至少为 3 位', trigger: ['change']}
+            { min:8, message: '密码至少为 8 位', trigger: ['change']}
           ],
         }
       };
@@ -46,7 +46,8 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
+            console.log('登录操作');
+            this.$store.dispatch("Login",this.ruleForm).then(resp => {this.$message.success(resp);this.$router.push('dashboard')}).catch(err => {this.$message.error(err);})
           } else {
             console.log('error submit!!');
             return false;
